@@ -6,6 +6,8 @@ import 'config/text_sizes.dart';
 import 'data/model/date_picker_month_info.dart';
 import 'utils/pdate_utils.dart' as util;
 
+/// [stroke] puts a line over the selected date
+/// while [fill] changes its background color
 enum SelectedDateVisibility {
   stroke,
   fill;
@@ -15,6 +17,7 @@ enum SelectedDateVisibility {
   bool get isFill => this == SelectedDateVisibility.fill;
 }
 
+/// the visibility type and color for selected date
 class SelectedDateStyle {
   final SelectedDateVisibility visibility;
   final Color color;
@@ -23,18 +26,65 @@ class SelectedDateStyle {
 }
 
 class PersianDatePicker extends StatefulWidget {
+  /// Leave this empty if you want your [PersianDatePicker] to contain the whole width of the screen
+  ///
+  /// If there is a [Padding] widget as parent of this widget and you want it to have a desired width too,
+  /// simply make a sum of width and the padding. For example:
+  ///
+  /// ```dart
+  /// int desiredWidth = 400;
+  /// int horizontalPadding = 10;
+  /// widthWithPadding = desiredWidth + (horizontalPadding * 2)
+  /// ```
+  ///
+  /// If you only want a desired width and there are no [Padding] as it's parent, just pass the width
+  ///
+  /// If there is [Padding] as it's parent and you want it to take the whole width, make a sum of your padding and
+  /// ```dart
+  /// MediaQuery.of(context).size.width
+  /// ```
   final double? widthWithPadding;
+
+  /// TextStyle for week titles.
   final TextStyle weekTitlesTextStyle;
+
+  /// TextStyle for header navigator buttons
   final TextStyle headerButtonsTextStyle;
+
+  /// The Color for header navigator buttons background (primary color is recommended)
   final Color headerButtonsBackgroundColor;
+
+  /// The Color for header navigator buttons text and icon
   final Color headerButtonsForegroundColor;
-  final TextStyle headerMonthDisplayerTextStyle;
+
+  /// TextStyle for month display text on top (bold text is recommended)
+  final TextStyle headerMonthDisplayTextStyle;
+
+  /// The Color for days background
   final Color dateBackgroundColor;
+
+  /// TextStyle for day numbers
   final TextStyle dateTextStyle;
+
+  /// The visibility type and color for selected date
   final SelectedDateStyle selectedDateStyle;
+
+  /// ButtonStyle for the button in the bottom
   final ButtonStyle submitButtonStyle;
+
+  /// This gets called when user selects a date and taps the Submit button. use selectedDate.formatter to access all
+  /// details of the user's selected date
+  ///
+  /// It is recommended to call [pop] if you are using [PersianDatePicker] inside a BottomSheet / Dialog
   final Function(Jalali selectedDate) onSubmitDate;
+
+  /// This gets called when user has no selected date and taps the Submit button.
+  ///
+  /// It is recommended to show a toast as a hint for the user
   final Function() onEmptyDateSubmit;
+
+  /// Simply pass a date if you wish to have a date to be selected initially. This is pretty useful
+  /// for situations where user has saved a date in your state management
   final Jalali? chosenDate;
 
   const PersianDatePicker({
@@ -46,7 +96,7 @@ class PersianDatePicker extends StatefulWidget {
     this.headerButtonsTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
     this.headerButtonsBackgroundColor = Colours.primary,
     this.headerButtonsForegroundColor = Colours.main,
-    this.headerMonthDisplayerTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
+    this.headerMonthDisplayTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
     this.dateBackgroundColor = Colours.primary,
     this.dateTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
     this.selectedDateStyle = const SelectedDateStyle(
@@ -114,7 +164,7 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
               buttonsBackgroundColor: widget.headerButtonsBackgroundColor,
               buttonsForegroundColor: widget.headerButtonsForegroundColor,
               buttonsTextStyle: widget.headerButtonsTextStyle,
-              monthDisplayerTextStyle: widget.headerMonthDisplayerTextStyle,
+              monthDisplayerTextStyle: widget.headerMonthDisplayTextStyle,
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(screenWidthWithPadding * 0.04, 12, screenWidthWithPadding * 0.04, 12),
