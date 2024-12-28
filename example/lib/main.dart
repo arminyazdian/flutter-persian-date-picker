@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:flutter_persian_date_picker/flutter_persian_date_picker.dart';
+import 'package:flutter_persian_date_picker/date_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,47 +13,64 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _flutterPersianDatePickerPlugin = FlutterPersianDatePicker();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flutterPersianDatePickerPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+    return const MaterialApp(
+      home: DatePickerTest(),
+    );
+  }
+}
+
+class DatePickerTest extends StatefulWidget {
+  const DatePickerTest({super.key});
+
+  @override
+  State<DatePickerTest> createState() => _DatePickerTestState();
+}
+
+class _DatePickerTestState extends State<DatePickerTest> {
+  @override
+  Widget build(BuildContext context) {
+    final double datePickerWidthWithPadding = MediaQuery.of(context).size.width - 32;
+
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PersianDatePicker(
+              widthWithPadding: datePickerWidthWithPadding,
+              onSubmitDate: (selectedDate) {
+                String formattedSelectedDate =
+                    'تاریخ انتخاب شده ${selectedDate.formatter.yyyy}/${selectedDate.formatter.mm}/${selectedDate.formatter.dd} میباشد';
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(formattedSelectedDate),
+                    ),
+                  ),
+                );
+              },
+              onEmptyDateSubmit: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        'تاریخ انتخاب نشده است',
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

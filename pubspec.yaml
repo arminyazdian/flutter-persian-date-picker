@@ -21,11 +21,3 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.example.flutter_persian_date_picker
-        pluginClass: FlutterPersianDatePickerPlugin
-      web:
-        pluginClass: FlutterPersianDatePickerWeb
-        fileName: flutter_persian_date_picker_web.dart
