@@ -9,7 +9,5 @@ class Colours {
 
   static const Color primary = Color(0xFF26A69A);
 
-  static const Color secondary = Color(0xFF00695C);
-
-  static const Color background = Colors.white;
+  static const Color secondary = Color(0xBDBBE8E4);
 }

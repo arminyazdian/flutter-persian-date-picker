@@ -97,12 +97,9 @@ class PersianDatePicker extends StatefulWidget {
     this.headerButtonsBackgroundColor = Colours.primary,
     this.headerButtonsForegroundColor = Colours.main,
     this.headerMonthDisplayTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
-    this.dateBackgroundColor = Colours.primary,
-    this.dateTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
-    this.selectedDateStyle = const SelectedDateStyle(
-      visibility: SelectedDateVisibility.stroke,
-      color: Colours.secondary,
-    ),
+    this.dateBackgroundColor = Colours.secondary,
+    this.dateTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.title),
+    this.selectedDateStyle = const SelectedDateStyle(visibility: SelectedDateVisibility.stroke, color: Colours.primary),
     required this.onEmptyDateSubmit,
     this.submitButtonStyle = const ButtonStyle(
       backgroundColor: MaterialStatePropertyAll(Colours.primary),
