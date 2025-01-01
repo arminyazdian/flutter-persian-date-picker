@@ -102,6 +102,7 @@ class _DatePickerTestState extends State<DatePickerTest> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 26),
                         margin: const EdgeInsets.all(20),
                         child: Material(
+                          color: Colors.transparent,
                           child: PersianDatePicker(
                             widthWithPadding: datePickerWidthWithPadding,
                             chosenDate: chosenDate,
