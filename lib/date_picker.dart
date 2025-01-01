@@ -51,11 +51,8 @@ class PersianDatePicker extends StatefulWidget {
   /// TextStyle for header navigator buttons
   final TextStyle headerButtonsTextStyle;
 
-  /// The Color for header navigator buttons background (primary color is recommended)
-  final Color headerButtonsBackgroundColor;
-
-  /// The Color for header navigator buttons text and icon
-  final Color headerButtonsForegroundColor;
+  /// ButtonStyle for header navigator buttons
+  final ButtonStyle headerButtonsStyle;
 
   /// TextStyle for month display text on top (bold text is recommended)
   final TextStyle headerMonthDisplayTextStyle;
@@ -76,12 +73,12 @@ class PersianDatePicker extends StatefulWidget {
   /// details of the user's selected date
   ///
   /// It is recommended to call [pop] if you are using [PersianDatePicker] inside a BottomSheet / Dialog
-  final Function(Jalali selectedDate) onSubmitDate;
+  final void Function(Jalali selectedDate) onSubmitDate;
 
   /// This gets called when user has no selected date and taps the Submit button.
   ///
   /// It is recommended to show a toast as a hint for the user
-  final Function() onEmptyDateSubmit;
+  final void Function() onEmptyDateSubmit;
 
   /// Simply pass a date if you wish to have a date to be selected initially. This is pretty useful
   /// for situations where user has saved a date in your state management
@@ -94,8 +91,11 @@ class PersianDatePicker extends StatefulWidget {
     this.chosenDate,
     this.weekTitlesTextStyle = const TextStyle(fontSize: TextSizes.bodyLarge, color: Colours.hint),
     this.headerButtonsTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
-    this.headerButtonsBackgroundColor = Colours.primary,
-    this.headerButtonsForegroundColor = Colours.main,
+    this.headerButtonsStyle = const ButtonStyle(
+      backgroundColor: MaterialStatePropertyAll(Colours.primary),
+      foregroundColor: MaterialStatePropertyAll(Colours.main),
+      shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+    ),
     this.headerMonthDisplayTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
     this.dateBackgroundColor = Colours.secondary,
     this.dateTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.title),
@@ -150,99 +150,102 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SizedBox(
-        width: screenWidthWithPadding,
-        child: Column(
-          children: [
-            _Header(
-              currentDate: currentVisibleDate ?? Jalali.now(),
-              onPreviousMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) - 1),
-              onNextMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) + 1),
-              buttonsBackgroundColor: widget.headerButtonsBackgroundColor,
-              buttonsForegroundColor: widget.headerButtonsForegroundColor,
-              buttonsTextStyle: widget.headerButtonsTextStyle,
-              monthDisplayerTextStyle: widget.headerMonthDisplayTextStyle,
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(screenWidthWithPadding * 0.04, 12, screenWidthWithPadding * 0.04, 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  Strings.weekTitles.length,
-                  (index) {
-                    return Text(
-                      Strings.weekTitles[index],
-                      style: widget.weekTitlesTextStyle,
-                      textAlign: TextAlign.center,
-                    );
-                  },
+      child: Wrap(
+        children: [
+          SizedBox(
+            width: screenWidthWithPadding,
+            child: Column(
+              children: [
+                _Header(
+                  currentDate: currentVisibleDate ?? Jalali.now(),
+                  onPreviousMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) - 1),
+                  onNextMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) + 1),
+                  buttonsStyle: widget.headerButtonsStyle,
+                  buttonsTextStyle: widget.headerButtonsTextStyle,
+                  monthDisplayerTextStyle: widget.headerMonthDisplayTextStyle,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: datesHeight,
-              child: GestureDetector(
-                onPanDown: (details) {
-                  if (dateController.page is double && (dateController.page ?? 0) < 0.5) {
-                    gotoPreviousMonth();
-                  } else if (dateController.page is double && (dateController.page ?? 0) > 1.5) {
-                    goToNextMonth();
-                  }
-                },
-                child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
-                  scrollBehavior: const ScrollBehavior().copyWith(overscroll: false),
-                  controller: dateController,
-                  itemCount: months?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return _Dates(
-                      info: months?[index] ?? DatePickerMonthInfo(offset: 0, daysWithOffset: 0, selectedDay: 0),
-                      dateBackgroundColor: widget.dateBackgroundColor,
-                      dateTextStyle: widget.dateTextStyle,
-                      selectedDateStyle: widget.selectedDateStyle,
-                      width: screenWidthWithPadding,
-                      onSelectDate: (dateDay) {
-                        setState(() {
-                          List<DatePickerMonthInfo> _months = List.from(months ?? []);
-                          _months[1] = DatePickerMonthInfo(
-                            offset: months?[1].offset ?? 0,
-                            daysWithOffset: months?[1].daysWithOffset ?? 0,
-                            selectedDay: dateDay,
-                          );
-
-                          Jalali _selectedDate = currentVisibleDate?.copy(day: dateDay) ??
-                              Jalali(Jalali.now().year, Jalali.now().month, Jalali.now().day);
-
-                          months = _months;
-                          selectedDate = _selectedDate;
-                        });
+                Padding(
+                  padding: EdgeInsets.fromLTRB(screenWidthWithPadding * 0.04, 12, screenWidthWithPadding * 0.04, 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      Strings.weekTitles.length,
+                      (index) {
+                        return Text(
+                          Strings.weekTitles[index],
+                          style: widget.weekTitlesTextStyle,
+                          textAlign: TextAlign.center,
+                        );
                       },
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: SizedBox(
-                width: double.infinity,
-                height: 45,
-                child: FilledButton(
-                  style: widget.submitButtonStyle,
-                  onPressed: () {
-                    if (selectedDate == null) {
-                      widget.onEmptyDateSubmit();
-                    } else {
-                      widget.onSubmitDate(
-                          selectedDate ?? Jalali(Jalali.now().year, Jalali.now().monthLength, Jalali.now().day));
-                    }
-                  },
-                  child: const Text(Strings.confirm),
+                SizedBox(
+                  height: datesHeight,
+                  child: GestureDetector(
+                    onPanDown: (details) {
+                      if (dateController.page is double && (dateController.page ?? 0) < 0.5) {
+                        gotoPreviousMonth();
+                      } else if (dateController.page is double && (dateController.page ?? 0) > 1.5) {
+                        goToNextMonth();
+                      }
+                    },
+                    child: PageView.builder(
+                      scrollDirection: Axis.horizontal,
+                      scrollBehavior: const ScrollBehavior().copyWith(overscroll: false),
+                      controller: dateController,
+                      itemCount: months?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return _Dates(
+                          info: months?[index] ?? DatePickerMonthInfo(offset: 0, daysWithOffset: 0, selectedDay: 0),
+                          dateBackgroundColor: widget.dateBackgroundColor,
+                          dateTextStyle: widget.dateTextStyle,
+                          selectedDateStyle: widget.selectedDateStyle,
+                          width: screenWidthWithPadding,
+                          onSelectDate: (dateDay) {
+                            setState(() {
+                              List<DatePickerMonthInfo> _months = List.from(months ?? []);
+                              _months[1] = DatePickerMonthInfo(
+                                offset: months?[1].offset ?? 0,
+                                daysWithOffset: months?[1].daysWithOffset ?? 0,
+                                selectedDay: dateDay,
+                              );
+
+                              Jalali _selectedDate = currentVisibleDate?.copy(day: dateDay) ??
+                                  Jalali(Jalali.now().year, Jalali.now().month, Jalali.now().day);
+
+                              months = _months;
+                              selectedDate = _selectedDate;
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: SizedBox(
+                    width: screenWidthWithPadding,
+                    height: 45,
+                    child: FilledButton(
+                      style: widget.submitButtonStyle,
+                      onPressed: () {
+                        if (selectedDate == null) {
+                          widget.onEmptyDateSubmit();
+                        } else {
+                          widget.onSubmitDate(
+                              selectedDate ?? Jalali(Jalali.now().year, Jalali.now().monthLength, Jalali.now().day));
+                        }
+                      },
+                      child: const Text(Strings.confirm),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -329,8 +332,7 @@ class _Header extends StatefulWidget {
   final void Function() onPreviousMonthTap;
   final void Function() onNextMonthTap;
   final Jalali currentDate;
-  final Color buttonsBackgroundColor;
-  final Color buttonsForegroundColor;
+  final ButtonStyle buttonsStyle;
   final TextStyle buttonsTextStyle;
   final TextStyle monthDisplayerTextStyle;
 
@@ -338,8 +340,7 @@ class _Header extends StatefulWidget {
     required this.onPreviousMonthTap,
     required this.onNextMonthTap,
     required this.currentDate,
-    required this.buttonsBackgroundColor,
-    required this.buttonsForegroundColor,
+    required this.buttonsStyle,
     required this.buttonsTextStyle,
     required this.monthDisplayerTextStyle,
   });
@@ -356,28 +357,12 @@ class _HeaderState extends State<_Header> {
       children: [
         Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.onPreviousMonthTap,
-            borderRadius: BorderRadius.circular(9),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: widget.buttonsBackgroundColor,
-                borderRadius: BorderRadius.circular(9),
-              ),
-              padding: const EdgeInsets.fromLTRB(10, 6, 5, 6),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.chevron_left,
-                    color: widget.buttonsForegroundColor,
-                    size: 22,
-                  ),
-                  Text(
-                    Strings.previousMonth,
-                    style: widget.buttonsTextStyle,
-                  ),
-                ],
-              ),
+          child: FilledButton(
+            onPressed: widget.onPreviousMonthTap,
+            style: widget.buttonsStyle,
+            child: Text(
+              Strings.previousMonth,
+              style: widget.buttonsTextStyle,
             ),
           ),
         ),
@@ -390,29 +375,12 @@ class _HeaderState extends State<_Header> {
         ),
         Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.onNextMonthTap,
-            borderRadius: BorderRadius.circular(9),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: widget.buttonsBackgroundColor,
-                borderRadius: BorderRadius.circular(9),
-              ),
-              padding: const EdgeInsets.fromLTRB(5, 6, 10, 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    Strings.nextMonth,
-                    style: widget.buttonsTextStyle,
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: widget.buttonsForegroundColor,
-                    size: 22,
-                  ),
-                ],
-              ),
+          child: FilledButton(
+            style: widget.buttonsStyle,
+            onPressed: widget.onNextMonthTap,
+            child: Text(
+              Strings.nextMonth,
+              style: widget.buttonsTextStyle,
             ),
           ),
         )

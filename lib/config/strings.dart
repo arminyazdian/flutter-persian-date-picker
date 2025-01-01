@@ -3,7 +3,7 @@ class Strings {
 
   static const String confirm = 'تایید';
 
-  static const String previousMonth = 'ماه قبل';
+  static const String previousMonth = '<   ماه قبل';
 
-  static const String nextMonth = 'ماه بعد';
+  static const String nextMonth = 'ماه بعد  >';
 }
