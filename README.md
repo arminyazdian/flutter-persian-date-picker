@@ -14,7 +14,7 @@ performance is quick enough to run smoothly on variety of devices including low-
 
 ```
 dependencies:
-  flutter_persian_date_picker: ^0.0.3
+  flutter_persian_date_picker: ^0.1.0
 ```
 
 or
@@ -99,7 +99,7 @@ final Color dateBackgroundColor;
 final TextStyle dateTextStyle;
 
 /// The visibility type and color for selected date
-final SelectedDateStyle selectedDateStyle;
+final SelectedDateStyle? selectedDateStyle;
 
 /// ButtonStyle for the button in the bottom
 final ButtonStyle submitButtonStyle;
