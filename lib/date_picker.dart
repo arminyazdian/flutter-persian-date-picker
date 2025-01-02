@@ -4,7 +4,7 @@ import 'config/strings.dart';
 import 'config/colours.dart';
 import 'config/text_sizes.dart';
 import 'data/model/date_picker_month_info.dart';
-import 'utils/pdate_utils.dart' as util;
+import 'utils/pdate_utils.dart';
 
 /// [stroke] puts a line over the selected date
 /// while [fill] changes its background color
@@ -204,18 +204,18 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
                           width: screenWidthWithPadding,
                           onSelectDate: (dateDay) {
                             setState(() {
-                              List<DatePickerMonthInfo> _months = List.from(months ?? []);
-                              _months[1] = DatePickerMonthInfo(
+                              List<DatePickerMonthInfo> tempMonths = List.from(months ?? []);
+                              tempMonths[1] = DatePickerMonthInfo(
                                 offset: months?[1].offset ?? 0,
                                 daysWithOffset: months?[1].daysWithOffset ?? 0,
                                 selectedDay: dateDay,
                               );
 
-                              Jalali _selectedDate = currentVisibleDate?.copy(day: dateDay) ??
+                              Jalali tempSelectedDate = currentVisibleDate?.copy(day: dateDay) ??
                                   Jalali(Jalali.now().year, Jalali.now().month, Jalali.now().day);
 
-                              months = _months;
-                              selectedDate = _selectedDate;
+                              months = tempMonths;
+                              selectedDate = tempSelectedDate;
                             });
                           },
                         );
@@ -285,10 +285,10 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
     setState(() {
       Jalali currentDate = currentVisibleDate ?? Jalali(Jalali.now().year, Jalali.now().month, Jalali.now().day);
       List<Jalali> targetDates = [currentDate, currentDate.addMonths(1), currentDate.addMonths(2)];
-      List<DatePickerMonthInfo> _months = _getMonthsInfo(targetDates: targetDates);
+      List<DatePickerMonthInfo> tempMonths = _getMonthsInfo(targetDates: targetDates);
 
       currentVisibleDate = targetDates[1];
-      months = _months;
+      months = tempMonths;
     });
   }
 
@@ -296,31 +296,32 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
     setState(() {
       Jalali currentDate = currentVisibleDate ?? Jalali(Jalali.now().year, Jalali.now().month, Jalali.now().day);
       List<Jalali> targetDates = [currentDate.addMonths(-2), currentDate.addMonths(-1), currentDate];
-      List<DatePickerMonthInfo> _months = _getMonthsInfo(targetDates: targetDates);
+      List<DatePickerMonthInfo> tempMonths = _getMonthsInfo(targetDates: targetDates);
 
       currentVisibleDate = targetDates[1];
-      months = _months;
+      months = tempMonths;
     });
   }
 
   List<DatePickerMonthInfo> _getMonthsInfo({required List<Jalali> targetDates, Jalali? initSelectedDate}) {
     List<int> offset = List.generate(
       targetDates.length,
-      (index) => util.firstDayOffset(targetDates[index].year, targetDates[index].month),
+      (index) => firstDayOffset(targetDates[index].year, targetDates[index].month),
     );
     List<int> daysWithOffset = List.generate(
       targetDates.length,
       (index) => targetDates[index].monthLength + offset[index],
     );
 
-    Jalali? _selectedDate = initSelectedDate ?? selectedDate;
+    Jalali? tempSelectedDate = initSelectedDate ?? selectedDate;
 
     List<DatePickerMonthInfo> months = List.generate(
       targetDates.length,
       (index) => DatePickerMonthInfo(
         offset: offset[index],
         daysWithOffset: daysWithOffset[index],
-        selectedDay: _selectedDate == targetDates[index].copy(day: _selectedDate?.day ?? 1) ? _selectedDate?.day : null,
+        selectedDay:
+            tempSelectedDate == targetDates[index].copy(day: tempSelectedDate?.day ?? 1) ? tempSelectedDate?.day : null,
       ),
     );
 

@@ -139,11 +139,7 @@ List<String> shortDayName = [
 /// day format (i.e. 'Jan 21'). Otherwise it will return the short date format
 /// (i.e. 'Jan 21, 2020').
 String formatRangeStartDate(MaterialLocalizations localizations, Jalali startDate, Jalali endDate) {
-  return startDate == null
-      ? 'تاریخ شروع'
-      : (startDate.year == endDate.year)
-          ? startDate.formatShortMonthDay()
-          : startDate.formatShortDate();
+  return (startDate.year == endDate.year) ? startDate.formatShortMonthDay() : startDate.formatShortDate();
 }
 
 /// Returns an locale-appropriate string to describe the end of a date range.
@@ -153,11 +149,9 @@ String formatRangeStartDate(MaterialLocalizations localizations, Jalali startDat
 /// just use the short month day format (i.e. 'Jan 21'), otherwise it will
 /// include the year (i.e. 'Jan 21, 2020').
 String formatRangeEndDate(MaterialLocalizations localizations, Jalali startDate, Jalali endDate, Jalali currentDate) {
-  return endDate == null
-      ? 'تاریخ پایان'
-      : (startDate.year == endDate.year && startDate.year == currentDate.year)
-          ? endDate.formatShortMonthDay()
-          : endDate.formatShortDate();
+  return (startDate.year == endDate.year && startDate.year == currentDate.year)
+      ? endDate.formatShortMonthDay()
+      : endDate.formatShortDate();
 }
 
 String formatDecimal(int number) {
