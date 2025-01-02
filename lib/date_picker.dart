@@ -48,11 +48,14 @@ class PersianDatePicker extends StatefulWidget {
   /// TextStyle for week titles.
   final TextStyle weekTitlesTextStyle;
 
-  /// TextStyle for header navigator buttons
-  final TextStyle headerButtonsTextStyle;
-
   /// ButtonStyle for header navigator buttons
   final ButtonStyle headerButtonsStyle;
+
+  /// Child widget of header right button
+  final Widget headerPreviousButtonChild;
+
+  /// Child widget of header left button
+  final Widget headerNextButtonChild;
 
   /// TextStyle for month display text on top (bold text is recommended)
   final TextStyle headerMonthDisplayTextStyle;
@@ -90,11 +93,18 @@ class PersianDatePicker extends StatefulWidget {
     required this.onSubmitDate,
     this.chosenDate,
     this.weekTitlesTextStyle = const TextStyle(fontSize: TextSizes.bodyLarge, color: Colours.hint),
-    this.headerButtonsTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
     this.headerButtonsStyle = const ButtonStyle(
       backgroundColor: MaterialStatePropertyAll(Colours.primary),
       foregroundColor: MaterialStatePropertyAll(Colours.main),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+    ),
+    this.headerPreviousButtonChild = const Text(
+      Strings.previousMonth,
+      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
+    ),
+    this.headerNextButtonChild = const Text(
+      Strings.nextMonth,
+      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
     ),
     this.headerMonthDisplayTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
     this.dateBackgroundColor = Colours.secondary,
@@ -161,7 +171,8 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
                   onPreviousMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) - 1),
                   onNextMonthTap: () => changeDatePage(page: (dateController.page?.round() ?? 0) + 1),
                   buttonsStyle: widget.headerButtonsStyle,
-                  buttonsTextStyle: widget.headerButtonsTextStyle,
+                  previousMonthButtonChild: widget.headerPreviousButtonChild,
+                  nextMonthButtonChild: widget.headerNextButtonChild,
                   monthDisplayerTextStyle: widget.headerMonthDisplayTextStyle,
                 ),
                 Padding(
@@ -334,7 +345,8 @@ class _Header extends StatefulWidget {
   final void Function() onNextMonthTap;
   final Jalali currentDate;
   final ButtonStyle buttonsStyle;
-  final TextStyle buttonsTextStyle;
+  final Widget previousMonthButtonChild;
+  final Widget nextMonthButtonChild;
   final TextStyle monthDisplayerTextStyle;
 
   const _Header({
@@ -342,8 +354,9 @@ class _Header extends StatefulWidget {
     required this.onNextMonthTap,
     required this.currentDate,
     required this.buttonsStyle,
-    required this.buttonsTextStyle,
     required this.monthDisplayerTextStyle,
+    required this.previousMonthButtonChild,
+    required this.nextMonthButtonChild,
   });
 
   @override
@@ -361,10 +374,7 @@ class _HeaderState extends State<_Header> {
           child: FilledButton(
             onPressed: widget.onPreviousMonthTap,
             style: widget.buttonsStyle,
-            child: Text(
-              Strings.previousMonth,
-              style: widget.buttonsTextStyle,
-            ),
+            child: widget.previousMonthButtonChild,
           ),
         ),
         Expanded(
@@ -379,10 +389,7 @@ class _HeaderState extends State<_Header> {
           child: FilledButton(
             style: widget.buttonsStyle,
             onPressed: widget.onNextMonthTap,
-            child: Text(
-              Strings.nextMonth,
-              style: widget.buttonsTextStyle,
-            ),
+            child: widget.nextMonthButtonChild,
           ),
         )
       ],
