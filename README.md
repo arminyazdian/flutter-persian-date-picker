@@ -14,7 +14,7 @@ performance is quick enough to run smoothly on variety of devices including low-
 
 ```
 dependencies:
-  flutter_persian_date_picker: ^0.0.1
+  flutter_persian_date_picker: ^0.0.2
 ```
 
 or
@@ -80,11 +80,14 @@ final double? widthWithPadding;
 /// TextStyle for week titles.
 final TextStyle weekTitlesTextStyle;
 
-/// TextStyle for header navigator buttons
-final TextStyle headerButtonsTextStyle;
-
 /// ButtonStyle for header navigator buttons
 final ButtonStyle headerButtonsStyle;
+
+/// Child widget of header right button
+final Widget headerPreviousButtonChild;
+
+/// Child widget of header left button
+final Widget headerNextButtonChild;
 
 /// TextStyle for month display text on top (bold text is recommended)
 final TextStyle headerMonthDisplayTextStyle;
@@ -100,6 +103,9 @@ final SelectedDateStyle selectedDateStyle;
 
 /// ButtonStyle for the button in the bottom
 final ButtonStyle submitButtonStyle;
+
+/// Child widget of submit button
+final Widget submitButtonChild;
 ```
 
 #### 📦 Used Packages:
