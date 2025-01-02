@@ -100,3 +100,6 @@ final SelectedDateStyle selectedDateStyle;
 final ButtonStyle submitButtonStyle;
 ```
 
+#### 📦 Used Packages:
+
+[FatulM/shamsi_date](https://github.com/FatulM/shamsi_date)
