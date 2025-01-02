@@ -72,6 +72,9 @@ class PersianDatePicker extends StatefulWidget {
   /// ButtonStyle for the button in the bottom
   final ButtonStyle submitButtonStyle;
 
+  /// Child widget of submit button
+  final Widget submitButtonChild;
+
   /// This gets called when user selects a date and taps the Submit button. use selectedDate.formatter to access all
   /// details of the user's selected date
   ///
@@ -115,6 +118,10 @@ class PersianDatePicker extends StatefulWidget {
       backgroundColor: MaterialStatePropertyAll(Colours.primary),
       foregroundColor: MaterialStatePropertyAll(Colours.main),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+    ),
+    this.submitButtonChild = const Text(
+      Strings.confirm,
+      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
     ),
   });
 
@@ -249,7 +256,7 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
                               selectedDate ?? Jalali(Jalali.now().year, Jalali.now().monthLength, Jalali.now().day));
                         }
                       },
-                      child: const Text(Strings.confirm),
+                      child: widget.submitButtonChild,
                     ),
                   ),
                 ),
