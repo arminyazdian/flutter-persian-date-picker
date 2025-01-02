@@ -1,7 +1,7 @@
 name: flutter_persian_date_picker
-description: A new Flutter project.
+description: DatePicker with full support of the Persian calendar with highly customizable and responsive UI.
 version: 0.0.1
-homepage:
+homepage: https://github.com/arminyazdian/flutter-persian-date-picker
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
