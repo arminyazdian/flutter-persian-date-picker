@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'config/strings.dart';
-import 'config/colours.dart';
-import 'config/text_sizes.dart';
 import 'data/model/date_picker_month_info.dart';
 import 'utils/pdate_utils.dart';
 
@@ -61,13 +59,13 @@ class PersianDatePicker extends StatefulWidget {
   final TextStyle headerMonthDisplayTextStyle;
 
   /// The Color for days background
-  final Color dateBackgroundColor;
+  final Color? dateBackgroundColor;
 
   /// TextStyle for day numbers
   final TextStyle dateTextStyle;
 
   /// The visibility type and color for selected date
-  final SelectedDateStyle selectedDateStyle;
+  final SelectedDateStyle? selectedDateStyle;
 
   /// ButtonStyle for the button in the bottom
   final ButtonStyle submitButtonStyle;
@@ -95,34 +93,24 @@ class PersianDatePicker extends StatefulWidget {
     this.widthWithPadding,
     required this.onSubmitDate,
     this.chosenDate,
-    this.weekTitlesTextStyle = const TextStyle(fontSize: TextSizes.bodyLarge, color: Colours.hint),
+    this.weekTitlesTextStyle = const TextStyle(fontSize: 16, color: Colors.grey),
     this.headerButtonsStyle = const ButtonStyle(
-      backgroundColor: MaterialStatePropertyAll(Colours.primary),
-      foregroundColor: MaterialStatePropertyAll(Colours.main),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
     ),
     this.headerPreviousButtonChild = const Text(
       Strings.previousMonth,
-      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
+      style: TextStyle(fontSize: 14, color: Colors.white),
     ),
-    this.headerNextButtonChild = const Text(
-      Strings.nextMonth,
-      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
-    ),
-    this.headerMonthDisplayTextStyle = const TextStyle(fontSize: TextSizes.titleSmall, color: Colours.title),
-    this.dateBackgroundColor = Colours.secondary,
-    this.dateTextStyle = const TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.title),
-    this.selectedDateStyle = const SelectedDateStyle(visibility: SelectedDateVisibility.stroke, color: Colours.primary),
+    this.headerNextButtonChild = const Text(Strings.nextMonth, style: TextStyle(fontSize: 14, color: Colors.white)),
+    this.headerMonthDisplayTextStyle = const TextStyle(fontSize: 18, color: Colors.black),
+    this.dateBackgroundColor,
+    this.dateTextStyle = const TextStyle(fontSize: 14, color: Colors.black),
+    this.selectedDateStyle,
     required this.onEmptyDateSubmit,
     this.submitButtonStyle = const ButtonStyle(
-      backgroundColor: MaterialStatePropertyAll(Colours.primary),
-      foregroundColor: MaterialStatePropertyAll(Colours.main),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
     ),
-    this.submitButtonChild = const Text(
-      Strings.confirm,
-      style: TextStyle(fontSize: TextSizes.bodyMedium, color: Colours.main),
-    ),
+    this.submitButtonChild = const Text(Strings.confirm, style: TextStyle(fontSize: 14, color: Colors.white)),
   });
 
   @override
@@ -216,9 +204,14 @@ class _PersianDatePickerState extends State<PersianDatePicker> {
                       itemBuilder: (context, index) {
                         return _Dates(
                           info: months?[index] ?? DatePickerMonthInfo(offset: 0, daysWithOffset: 0, selectedDay: 0),
-                          dateBackgroundColor: widget.dateBackgroundColor,
+                          dateBackgroundColor:
+                              widget.dateBackgroundColor ?? Theme.of(context).colorScheme.primary.withOpacity(0.3),
                           dateTextStyle: widget.dateTextStyle,
-                          selectedDateStyle: widget.selectedDateStyle,
+                          selectedDateStyle: widget.selectedDateStyle ??
+                              SelectedDateStyle(
+                                visibility: SelectedDateVisibility.stroke,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                           width: screenWidthWithPadding,
                           onSelectDate: (dateDay) {
                             setState(() {
