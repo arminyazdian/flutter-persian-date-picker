@@ -12,12 +12,14 @@ performance is quick enough to run smoothly on variety of devices including low-
 
 ```
 dependencies:
-  flutter_persian_date_picker: ^1.0.0
+  flutter_persian_date_picker: ^0.0.1
 ```
 
 or
 
-```$ flutter pub add flutter_persian_date_picker```
+```
+$ flutter pub add flutter_persian_date_picker
+```
 
 #### 2- Import to your Dart code:
 
@@ -44,8 +46,8 @@ PersianDatePicker(
 ## ✏️ Quick Document:
 
 ```
-/// This gets called when user selects a date and taps the Submit button. use selectedDate.formatter to access all
-/// details of the user's selected date
+/// This gets called when user selects a date and taps the Submit button.
+/// use selectedDate.formatter to access all details of the user's selected date
 ///
 /// It is recommended to call [pop] if you are using [PersianDatePicker] inside a BottomSheet / Dialog
 final void Function(Jalali selectedDate) onSubmitDate;
@@ -69,7 +71,8 @@ final Jalali? chosenDate;
 ///
 /// If you only want a desired width and there are no [Padding] as it's parent, just pass the width
 ///
-/// If there is [Padding] as it's parent and you want it to take the whole width, make a sum of your padding and MediaQuery.of(context).size.width
+/// If there is [Padding] as it's parent and you want it to take the whole width,
+/// make a sum of your padding and MediaQuery.of(context).size.width
 final double? widthWithPadding;
 
 /// TextStyle for week titles.
