@@ -6,3 +6,8 @@
 
 * Header buttons child can be any widget instead of a text
 * Submit button child can be any widget instead of a text
+*
+
+## 0.0.3
+
+* Bug fix

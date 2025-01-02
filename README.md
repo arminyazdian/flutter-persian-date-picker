@@ -1,6 +1,6 @@
 # Flutter Persian Date Picker
 
-[![Pub](https://img.shields.io/pub/v/flutter_linear_datepicker?labelColor=%23BBE8E4&color=%2326A69A)](https://pub.dev/packages/flutter_persian_date_picker)
+[![Pub](https://img.shields.io/pub/v/flutter_persian_date_picker?labelColor=%23BBE8E4&color=%2326A69A)](https://pub.dev/packages/flutter_persian_date_picker)
 
 Provides full support of the Persian calendar with highly customizable and responsive UI. The
 performance is quick enough to run smoothly on variety of devices including low-end phones.
@@ -14,7 +14,7 @@ performance is quick enough to run smoothly on variety of devices including low-
 
 ```
 dependencies:
-  flutter_persian_date_picker: ^0.0.2
+  flutter_persian_date_picker: ^0.0.3
 ```
 
 or
