@@ -41,8 +41,6 @@ class _DatePickerTestState extends State<DatePickerTest> {
 
   @override
   Widget build(BuildContext context) {
-    final double datePickerWidthWithPadding = MediaQuery.of(context).size.width - 32;
-
     return Scaffold(
       appBar: AppBar(title: const Text('تست دیت پیکر'), centerTitle: true),
       body: Center(
@@ -61,7 +59,7 @@ class _DatePickerTestState extends State<DatePickerTest> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 26),
                       child: PersianDatePicker(
-                        widthWithPadding: datePickerWidthWithPadding,
+                        widthWithPadding: MediaQuery.of(context).size.width - 32,
                         chosenDate: chosenDate,
                         onSubmitDate: (selectedDate) {
                           chosenDate = selectedDate;
@@ -104,7 +102,7 @@ class _DatePickerTestState extends State<DatePickerTest> {
                         child: Material(
                           color: Colors.transparent,
                           child: PersianDatePicker(
-                            widthWithPadding: datePickerWidthWithPadding,
+                            widthWithPadding: MediaQuery.of(context).size.width - 52,
                             chosenDate: chosenDate,
                             onSubmitDate: (selectedDate) {
                               chosenDate = selectedDate;
